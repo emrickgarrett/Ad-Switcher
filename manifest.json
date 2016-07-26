@@ -21,7 +21,7 @@
 		"128" : "icons/default-128.png"
 	},
 	"browser_action" : {
-		"default_icon": "icon/default.png",
+		"default_icon": "icons/default-19.png",
 		"default_title" : "Ad-Switcher Settings",
 		"default_popup": "popup/popup.html"
 	}
