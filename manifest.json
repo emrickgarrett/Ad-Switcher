@@ -4,16 +4,22 @@
 	"description" : "Replace websites ads with ours to generate money for you!",
 	"author" : "Garrett Emrick + Alexander Arnold",
 	"version" : "0.1",
+	"background" : {
+		"scripts": [
+			"scripts/easylistdownloader.js"
+		]
+	},
 	"content_scripts" : [
 	{
-		"matches": [
-		"http://*/*", "https://*/*"
-		],
-		"js" : ["scripts/replacer.js"]
+		"matches": ["<all_urls>"],
+		"js" : [
+			"scripts/replacer.js"
+		]
 	}],
 	"permissions" : [
 		"activeTab",
-		"storage"
+		"storage",
+		"downloads"
 	],
 	"icons" : {
 		"16" : "icons/default-16.png",
