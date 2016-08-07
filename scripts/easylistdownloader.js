@@ -12,18 +12,18 @@ chrome.storage.local.get(["lastUpdate"], function(items){
     //If it hasn't updated in an hour, redownload the file.
 	if(lastUpdate == null || lastUpdate === undefined || lastUpdate < new Date().getTime() - 1000*60*60*24){
 		
-		var request = {type: "lastUpdate", data: lastUpdate + ""};
 		downloadData();
 	}
 });
 
 
 function downloadData(){
+	/*	Removed For now, Might not Need to download
 	chrome.downloads.download({
 		url: "https://easylist.to/easylist/easylist.txt",
 		filename: "Ad-Switcher/easylist.txt",
 		conflictAction: "overwrite"
-	});
+	});*/
 
 	retrieveEasyList();
 
