@@ -54,7 +54,7 @@
 
 
 	//Ad ID's that we can block, replace with my list
-	var adIds = retrieveAdList();
+	var adIds;
 	/*[
 		{
 			id: 'google_companion_ad_div',
@@ -72,6 +72,14 @@
 			height:600
 		}
 	];*/
+	retrieveAdList();
+
+
+
+
+
+
+
 
 	function getAd(images){
 		return images[Math.floor(Math.random() * images.length)];
@@ -137,7 +145,7 @@
 
 	function startAdReplacement(){
 		if(adIds == null || typeof adIds == "undefined"){
-			setTimeout(startAdReplacement(), 500);
+			setTimeout(function(){startAdReplacement()}, 500);
 		}
 		else{
 			useAds();
@@ -145,6 +153,7 @@
 	}
 
 	function useAds(){
+		console.log("Replacing the ads...");
 		setTimeout(function(){
 				ads.forEach(function(adData){
 					if(generateAds(adData.width, adData.height)){
