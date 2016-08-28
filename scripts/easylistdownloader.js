@@ -10,10 +10,10 @@ chrome.storage.local.get(["lastUpdate"], function(items){
     }
 
     //If it hasn't updated in an hour, redownload the file.
-	if(lastUpdate == null || lastUpdate === undefined || lastUpdate < new Date().getTime() - 1000*60*60*24){
+	//if(lastUpdate == null || lastUpdate === undefined || lastUpdate < new Date().getTime() - 1000*60*60*24){
 		
 		downloadData();
-	}
+	//}
 });
 
 
@@ -38,10 +38,13 @@ function getEasyList(){
 	chrome.storage.local.get(["easylist"], function(items){
 		if(chrome.runtime.lastError){
 			//Error
-			alert("error");
+			console.log("Problem retrieving the Ad-Blocker list for the Ad-Switcher");
 			return null;
 		}else{
-			alert("Item: " + items.easylist);
+			if(items.easylist == null){
+				downloadData();
+				return getEasyList();
+			}
 			return items.easylist;
 		}
 	});
@@ -49,13 +52,23 @@ function getEasyList(){
 
 function storeEasyList(data){
 		chrome.storage.local.set({"easylist" : data}, function(){
-			if(chrome.runtime.lastError){
-				alert("error");
-			}
+		if(chrome.runtime.lastError){
+			console.log("Problem storing the Ad-Blocker list for the Ad-Switcher");
+		}
 		// Data saved!
 		console.log("Data_saved");
 		getEasyList();
 	})
+}
+
+function formatEasyList(result){
+	// Convert easy list to json
+	
+	var json = JSON.parse(result);
+
+	alert(json);
+
+	return json;
 }
 
 
@@ -64,8 +77,22 @@ function retrieveEasyList(){
 	xmlhttp.open("GET", "https://easylist.to/easylist/easylist.txt");
 	xmlhttp.onreadystatechange = function(){
 		var result = xmlhttp.responseText;
-		//console.log(result);
-		storeEasyList(result);
+		console.log(result);
+		storeEasyList(formatEasyList(result));
 	}
 	xmlhttp.send();
 }
+
+/** Method to listen for calls from content scripts **/
+
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+
+  	var resp = sendResponse;
+    if (request.method == "getList"){
+    	easyList = getEasyList();
+    	console.log(easyList);
+    	resp({result: easyList});
+    }
+    return true;
+});
